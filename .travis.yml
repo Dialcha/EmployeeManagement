@@ -1,9 +1,11 @@
 ## YAML Template.
+sudo: required
 language: java
 jdk:
 - oraclejdk9
 services:
 - mysql
+- docker
 dist: trusty
 sudo: required
 addons:
@@ -17,4 +19,20 @@ before_script:
 - mysql -u root -e "CREATE USER 'sa'@'localhost' IDENTIFIED BY 'sa';"
 - mysql -u root -e "GRANT ALL ON human.* TO 'sa'@'localhost';"
 before_install:
+# install heroku CLI
+- wget -qO- https://toolbelt.heroku.com/install.sh | sh
 - chmod +x mvnw
+- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+- echo "$HEROKU_PASSWORD" | docker login -u "$HEROKU_USERNAME" --password-stdin registry.heroku.com
+script:
+- docker build -t dialcha/employee-backend .
+- docker tag unqpdes/todo-list-front registry.heroku.com/$HEROKU_APP_NAME/web
+deploy:
+  provider: script
+  script:
+    # push to dockerhub
+    docker push dialcha/employee-backend;
+    docker push registry.heroku.com/$HEROKU_APP_NAME/web;
+    heroku container:release web --app $HEROKU_APP_NAME
+  on:
+    branch: master
