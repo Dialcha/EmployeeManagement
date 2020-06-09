@@ -25,8 +25,8 @@ before_install:
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 - echo "$HEROKU_PASSWORD" | docker login -u "$HEROKU_USERNAME" --password-stdin registry.heroku.com
 script:
-- docker build -t dialcha/employee-backend:tag - f /bootdocker/Dockerfile
-- docker tag Dialcha/employee-backend registry.heroku.com/$HEROKU_APP_NAME/web
+- docker build -t dialcha/employee-backend:tag --file /bootdocker/Dockerfile
+- docker tag dialcha/employee-backend registry.heroku.com/$HEROKU_APP_NAME/web
 deploy:
   provider: script
   script:
