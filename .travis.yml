@@ -11,13 +11,13 @@ sudo: required
 addons:
 apt:
 packages:
-- mysql-server-5.6
-- mysql-client-core-5.6
-- mysql-client-5.6
+- mysql-server-5.7
+- mysql-client-core-5.7
+- mysql-client-5.7
 before_script:
-- mysql -u root -e 'CREATE DATABASE human;'
+- mysql -u root -e 'CREATE DATABASE employee;'
 - mysql -u root -e "CREATE USER 'sa'@'localhost' IDENTIFIED BY 'sa';"
-- mysql -u root -e "GRANT ALL ON human.* TO 'sa'@'localhost';"
+- mysql -u root -e "GRANT ALL ON employee.* TO 'sa'@'localhost';"
 before_install:
 # install heroku CLI
 - wget -qO- https://toolbelt.heroku.com/install.sh | sh
